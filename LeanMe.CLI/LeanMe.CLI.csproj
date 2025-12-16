@@ -8,4 +8,8 @@
         <RootNamespace>LeanMe</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\LeanMe.LibaryManager\LeanMe.LibaryManager.csproj" />
+    </ItemGroup>
+
 </Project>
