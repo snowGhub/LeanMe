@@ -77,7 +77,7 @@ public class LibaryService
         var loanDate = DateTime.Now;
         var dueDate = loanDate.Date.AddDays(loanDays);
 
-        var loan = new Loan(_nextLoanId, medium, customer, loanDate, dueDate);
+        var loan = new Loan(_nextLoanId++, medium, customer, loanDate, dueDate);
         loanList.Add(loan);
         
         customer.BorrowdedLoans.Add(loan);

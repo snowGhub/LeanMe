@@ -16,7 +16,7 @@ public abstract class Medium
 
     public string Title
     {
-        get => string.Empty;
+        get;
         private set
         {
             if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException("Titel darf nicht leer sein.", nameof(Title));
