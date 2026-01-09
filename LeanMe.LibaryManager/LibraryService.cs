@@ -1,12 +1,21 @@
 namespace LeanMe.LibaryManager;
 
-public class LibaryService
+public class LibraryService
 {
     private int _nextLoanId = 1;
     private List<Medium> mediaList { get; } = [];
     private List<Customer> customerList { get; } = [];
-    public List<Loan> loanList { get; set; } = [];
+    private List<Loan> loanList { get; set; } = [];
 
+    public void LoadSnapshot(IEnumerable<Medium> media, IEnumerable<Customer> customers, IEnumerable<Loan> loans)
+    {
+        mediaList.AddRange(media);
+        customerList.AddRange(customers);
+        loanList.AddRange(loans);
+
+        _nextLoanId = loanList.Count == 0 ? 1 : loanList.Max(l => l.Id) + 1;
+    }
+    
     public void AddMedium(Medium medium)
     {
         if (medium is null) throw new ArgumentNullException(nameof(medium));

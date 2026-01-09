@@ -4,7 +4,7 @@ public class Customer
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    private string Address { get; set; }
+    public string Address { get; set; }
     public List<Loan> BorrowdedLoans { get; } = [];
 
     public Customer(int id, string name, string address)

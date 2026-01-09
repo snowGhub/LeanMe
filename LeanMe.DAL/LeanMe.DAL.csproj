@@ -5,11 +5,9 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>LeanMe</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LeanMe.DAL\LeanMe.DAL.csproj" />
       <ProjectReference Include="..\LeanMe.LibaryManager\LeanMe.LibaryManager.csproj" />
     </ItemGroup>
 

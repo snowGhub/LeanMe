@@ -1,18 +1,18 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using LeanMe;
+using LeanMe.DAL;
+using LeanMe.DAL.models;
 using LeanMe.LibaryManager;
 
+var repo = new JsonLibraryRepository("data/library.json");
+var service = new LibraryService();
 
-var service = new LibaryService();
+var snapshot = await repo.LoadAsync();
+var (media, customers, loans) = LibrarySnapshotMapper.ToDomain(snapshot);
+service.LoadSnapshot(media, customers, loans);
 
-Console.WriteLine("=== Lean Console App by Rudolf Astl===");
-
-service.AddMedium(new Book(1,"Clean Code", 2,"Rudolf Astl","ISBN-PLACEHOLDER"));
-service.AddMedium(new DVD(2, "Inception", 1,"Rudolf Astl der 2.",140));
-
-service.AddCostumer(new Customer(100, "Rudolf Astl der 3.","Musterstraße 1"));
-service.AddCostumer(new Customer(101, "Rudolf Astl der 3.", "Musterweg 2"));
+Console.WriteLine("Working Directory: " + Environment.CurrentDirectory);
 
 while (true)
 {
@@ -42,6 +42,7 @@ while (true)
         
             case "3":
                 Presentation.LendFlow(service);
+                await repo.SaveAsync(LibrarySnapshotMapper.ToDto(service));
                 break;
         
             case "4":

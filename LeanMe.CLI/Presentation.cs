@@ -4,7 +4,7 @@ namespace LeanMe;
 
 public static class Presentation
 {
-    public static void ShowMedia(LibaryService service)
+    public static void ShowMedia(LibraryService service)
     {
         Console.WriteLine();
         Console.WriteLine("== Medien ==");
@@ -14,7 +14,7 @@ public static class Presentation
         }
     }
 
-    public static void ShowCustomers(LibaryService service)
+    public static void ShowCustomers(LibraryService service)
     {
         Console.WriteLine();
         Console.WriteLine("== Kunden ==");
@@ -24,7 +24,7 @@ public static class Presentation
         }
     }
 
-    public static void ShowActiveLoans(LibaryService service)
+    public static void ShowActiveLoans(LibraryService service)
     {
         Console.WriteLine();
         Console.WriteLine("== Aktive Ausleihen ==");
@@ -42,7 +42,7 @@ public static class Presentation
     }
 
     // Ausleih Flow wird hier drin gestartet
-    public static void LendFlow(LibaryService service)
+    public static void LendFlow(LibraryService service)
     {
         Console.WriteLine();
         Console.WriteLine("== AUSLEIHE ==");
@@ -66,7 +66,7 @@ public static class Presentation
     }
 
     // Hier wollen wir ein Buch zurückgeben
-    public static void ReturnFlow(LibaryService service)
+    public static void ReturnFlow(LibraryService service)
     {
         Console.WriteLine();
         Console.WriteLine("== RÜCKGABE ==");

@@ -1,0 +1,27 @@
+{
+  "media": [
+    {
+      "type": "Book",
+      "id": 10,
+      "title": "Clean Code",
+      "totalCopies": 2,
+      "availableCopies": 2,
+      "author": "Robert C. Martin",
+      "isbn": "ISBN-PLACEHOLDER"
+    },
+    {
+      "type": "DVD",
+      "id": 20,
+      "title": "Inception",
+      "totalCopies": 1,
+      "availableCopies": 1,
+      "director": "Christopher Nolan",
+      "durationMinutes": 148
+    }
+  ],
+  "customers": [
+    { "id": 1, "name": "Max Mustermann", "address": "Musterstraße 1" },
+    { "id": 2, "name": "Erika Musterfrau", "address": "Beispielweg 2" }
+  ],
+  "loans": []
+}

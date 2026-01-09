@@ -2,8 +2,8 @@ namespace LeanMe.LibaryManager;
 
 public class Book : Medium
 {
-    private string Author { get; }
-    private string Isbn { get; }
+    public string Author { get; }
+    public string Isbn { get; }
 
     public Book(int id, string title, int totalCopies, string author, string isbn)
         : base(id, title, totalCopies)
