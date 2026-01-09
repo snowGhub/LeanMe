@@ -47,6 +47,7 @@ while (true)
         
             case "4":
                 Presentation.ReturnFlow(service);
+                await repo.SaveAsync(LibrarySnapshotMapper.ToDto(service));
                 break;
         
             case "5":
