@@ -5,7 +5,7 @@ public class LibraryService
     private int _nextLoanId = 1;
     private List<Medium> mediaList { get; } = [];
     private List<Customer> customerList { get; } = [];
-    private List<Loan> loanList { get; set; } = [];
+    private List<Loan> loanList { get; } = [];
 
     public void LoadSnapshot(IEnumerable<Medium> media, IEnumerable<Customer> customers, IEnumerable<Loan> loans)
     {

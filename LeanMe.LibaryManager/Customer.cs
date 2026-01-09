@@ -2,9 +2,9 @@ namespace LeanMe.LibaryManager;
 
 public class Customer
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Address { get; set; }
+    public int Id { get; }
+    public string Name { get; }
+    public string Address { get; }
     public List<Loan> BorrowdedLoans { get; } = [];
 
     public Customer(int id, string name, string address)

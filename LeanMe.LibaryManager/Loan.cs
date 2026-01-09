@@ -2,12 +2,11 @@ namespace LeanMe.LibaryManager;
 
 public class Loan
 {
-    public int Id { get; set;  }
-    public Medium LoaneMedium { get; set; }
-    public DateTime LoanDate { get; set; }
-    public Customer Customer { get; set; }
-    public DateTime DueDate { get; set; }
-    // Optional:
+    public int Id { get;  }
+    public Medium LoaneMedium { get; }
+    public DateTime LoanDate { get; }
+    public Customer Customer { get; }
+    public DateTime DueDate { get; }
     public DateTime? ReturnDate { get; set; }
 
     public Loan(int id, Medium medium, Customer customer, DateTime loanDate, DateTime dueDate)
