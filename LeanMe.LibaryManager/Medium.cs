@@ -1,5 +1,6 @@
 namespace LeanMe.LibaryManager;
 
+// Abstrakte Basisklasse für alle Arten von Medien (Bücher, DVDs, etc.)
 public abstract class Medium
 {
     private int _availableCopies;
@@ -9,6 +10,7 @@ public abstract class Medium
         get;
         private set
         {
+            // Validierung: Verhindert ungültige oder negative IDs
             if (value <= 0) throw new ArgumentOutOfRangeException(nameof(Id), "Id muss > 0 sein.");
             field = value;
         }
@@ -19,6 +21,7 @@ public abstract class Medium
         get;
         private set
         {
+            // Sicherstellen, dass ein Titel vorhanden ist
             if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException("Titel darf nicht leer sein.", nameof(Title));
             field = value.Trim();
         }
@@ -41,6 +44,7 @@ public abstract class Medium
         get => _availableCopies;
         private set
         {
+            // Konsistenzprüfung: Man kann nicht mehr Exemplare verfügbar haben, als man insgesamt besitzt
             if (value < 0 || value > TotalCopies)
                 throw new ArgumentOutOfRangeException(nameof(AvailableCopies),
                     "AvailableCopies muss zwischen 0 und TotalCopies liegen.");
@@ -55,12 +59,17 @@ public abstract class Medium
         Title = title;
         TotalCopies = totalCopies;
         AvailableCopies = totalCopies;
+        // Beim Initialisieren sind im Normalfall alle Exemplare verfügbar
+        AvailableCopies = totalCopies;
     }
 
+    
+    // Hilfsmethode zur schnellen Bestandsprüfung
     public bool IsAvailable() => _availableCopies > 0;
 
     public void DecreaseAvailableCopies()
     {
+        // Wird beim Ausleihen aufgerufen
         if (!IsAvailable())
             throw new InvalidOperationException("Medium ist nicht verfügbar (keine Exemplare frei).");
 
@@ -69,12 +78,14 @@ public abstract class Medium
 
     public void IncreaseAvailableCopies()
     {
+        // Wird bei der Rückgabe aufgerufen
         if (AvailableCopies >= TotalCopies)
             throw new InvalidOperationException("Bestand kann nicht erhöht werden (beriets max. verfügbar).");
         
         AvailableCopies++;
     }
     
+    // Muss von abgeleiteten Klassen (Book, DVD) implementiert werden
     public abstract string GetDescription();
 
     public override string ToString() =>

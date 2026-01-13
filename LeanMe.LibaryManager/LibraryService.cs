@@ -2,7 +2,10 @@ namespace LeanMe.LibaryManager;
 
 public class LibraryService
 {
+    // Zähler für die nächste vergebene Loan-ID, um Eindeutigkeit zu garantieren
     private int _nextLoanId = 1;
+    
+    // Interne Datenspeicher (In-Memory Listen)
     private List<Medium> mediaList { get; } = [];
     private List<Customer> customerList { get; } = [];
     private List<Loan> loanList { get; } = [];
@@ -13,82 +16,39 @@ public class LibraryService
         customerList.AddRange(customers);
         loanList.AddRange(loans);
 
+        // Initialisiert den ID-Zähler basierend auf dem höchsten vorhandenen Wert,
+        // damit neue Ausleihen nach einem Neustart keine ID-Konflikte verursachen.
         _nextLoanId = loanList.Count == 0 ? 1 : loanList.Max(l => l.Id) + 1;
     }
     
-    public void AddMedium(Medium medium)
-    {
-        if (medium is null) throw new ArgumentNullException(nameof(medium));
-        if (mediaList.Any(m => m.Id == medium.Id))
-            throw new InvalidOperationException($"Medium mit Id {medium.Id} existiert bereits.");
-        
-        mediaList.Add(medium);
-    }
-    
     public IReadOnlyList<Medium> ShowMedia() => mediaList;
-
-    public List<Medium> SearchMedia(string titleOrId)
-    {
-        if (string.IsNullOrWhiteSpace(titleOrId))
-            return [];
-        
-        titleOrId = titleOrId.Trim();
-
-        if (int.TryParse(titleOrId, out var id))
-            return mediaList.Where(m => m.Id == id).ToList();
-        
-        return mediaList
-            .Where(m => m.Title.Contains(titleOrId, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-    }
-
-    public void AddCostumer(Customer customer)
-    {
-        if (customer is null) throw new ArgumentNullException(nameof(customer));
-        if (customerList.Any(c => c.Id == customer.Id))
-            throw new InvalidOperationException($"Kund*in mit Id {customer.Id} existiert bereits.");
-        
-        customerList.Add(customer);
-    }
     
     public IReadOnlyList<Customer> ShowCustomers() => customerList;
 
-    public Customer SearchCustomer(string nameOrId)
-    {
-        if (string.IsNullOrWhiteSpace(nameOrId))
-            throw new ArgumentException("Suchtext darf nicht leer sein.", nameof(nameOrId));
-        
-        nameOrId = nameOrId.Trim();
-
-        if (int.TryParse(nameOrId, out var id))
-        {
-            return customerList.FirstOrDefault(c => c.Id == id)
-                   ?? throw new KeyNotFoundException($"Kunde mit Id {id} nicht gefunden.");
-        }
-
-        return customerList.FirstOrDefault(c => c.Name.Contains(nameOrId, StringComparison.OrdinalIgnoreCase))
-               ?? throw new KeyNotFoundException($"Kunde mit Name '{nameOrId}' nicht gefunden.");
-    }
-
     public Loan LendMedium(int mediumId, int customerId, int loanDays = 14)
     {
+        // Abrufen der Objekte aus den Listen; wirft Fehler, falls IDs ungültig sind
         var medium = mediaList.FirstOrDefault(m => m.Id == mediumId)
                      ?? throw new KeyNotFoundException($"Medium mit Id {mediumId} nicht gefunden.");
 
         var customer = customerList.FirstOrDefault(c => c.Id == customerId)
                        ?? throw new KeyNotFoundException($"Kunde mit Id {customerId} nicht gefunden.");
 
+        // Prüfung der Geschäftsregel: Ist noch ein Exemplar im Regal?
         if (!medium.IsAvailable())
             throw new KeyNotFoundException($"Das Medium '{medium.Title}' ist nicht mehr verfügbar");
         
+        // Bestandsänderung: Ein Exemplar wird aus dem System "entnommen"
         medium.DecreaseAvailableCopies();
 
         var loanDate = DateTime.Now;
         var dueDate = loanDate.Date.AddDays(loanDays);
 
+        // Erstellung des Ausleih-Datensatzes
         var loan = new Loan(_nextLoanId++, medium, customer, loanDate, dueDate);
         loanList.Add(loan);
         
+        // Verknüpft die Ausleihe auch direkt mit dem Kunden-Objekt
         customer.BorrowdedLoans.Add(loan);
 
         return loan;
@@ -99,12 +59,15 @@ public class LibraryService
         var loan = loanList.FirstOrDefault(l => l.Id == loanId)
                    ?? throw new KeyNotFoundException($"Ausleihe mit Id {loanId} nicht gefunden.");
 
+        // Verhindert doppelte Rückgaben
         if (!loan.isActive())
             throw new InvalidOperationException(
                 "Rückgabe nicht möglich: Es gibt keine aktive Ausleihe (bereits zurückgegeben).");
         
+        // Status im Loan-Objekt auf "zurückgegeben" setzen
         loan.MarkReturned(DateTime.Now);
         
+        // Das Medium wieder für andere Kunden verfügbar machen
         loan.LoaneMedium.IncreaseAvailableCopies();
     }
     
