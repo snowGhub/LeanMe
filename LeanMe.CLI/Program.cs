@@ -30,6 +30,7 @@ while (true)
 
     try
     {
+        // Wählt jenachdem welche Auswahl der User gewählt hat, die Richtige Operation aus
         switch (choice)
         {
             case "1":
@@ -64,6 +65,7 @@ while (true)
     }
     catch (Exception e)
     {
+        // Abgefangene Exceptions werden hier ausgeworfen
         Console.WriteLine("FEHLER: " + e.Message);
     }
 }
